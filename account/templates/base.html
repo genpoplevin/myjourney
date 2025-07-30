@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+  </head>
+  <body>
+    <div id="header">
+      <span class="logo"><a href="{% url "blog:post_list" %}">MyBlog</a></span>
+      {% if request.user.is_authenticated %}
+        <ul class="menu">
+          <li {% if section == "post_list" %}class="selected"{% endif %}>
+            <a href="{% url 'blog:post_list' %}">Все записи</a>
+          </li>
+          <li {% if section == "follow" %}class="selected"{% endif %}>
+            <a href="{% url 'blog:follow_index' %}">Подписки</a>
+          </li>
+          <li  {% if section == "create" %}class="selected"{% endif %}> 
+            <a href="{% url 'blog:post_create' %}">Новая запись</a>
+          </li>
+        </ul>
+      {% endif %}
+      <span class="user">
+        {% if request.user.is_authenticated %}
+          Hello {{ request.user.first_name|default:request.user.username }},
+          <form action="{% url "account:logout" %}" method="post">
+            <button type="submit">Logout</button>
+            {% csrf_token %}
+          </form>
+        {% else %}
+          <a href="{% url "account:login" %}">Войти</a>
+          <a href="{% url "account:register" %}">Зарегистрироваться</a>
+        {% endif %}
+      </span>
+    </div>
+    <div id="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <div id="sidebar">
+      <h2>My blog</h2>
+      <p>Это мой блог</p>
+    </div>
+  </body>
+</html>
