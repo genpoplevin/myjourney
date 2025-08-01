@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Профайл пользователя {{ author.get_full_name }}
+{% endblock %}
+
+{% block content %}
+<div class="mb-5">        
+    <h1>Все путешествия пользователя {{ post.author.username }} </h1>
+    <h3>Всего путешествий: {{ post_number }} </h3>
+</div>
+{% for journey in page_obj %}
+  <h2>{{ journey.title }}</h2>
+  <article>
+    <ul>
+      <li>
+          Дата публикации: {{ journey.created|date:"d E Y" }} 
+      </li>
+    </ul>
+    <p>{{ journey.body }}</p>
+    <a href="{% url 'journey:detail' journey.id %}">
+      подробная информация 
+    </a>
+  </article>
+  {% if not forloop.last %}<hr>{% endif %}
+  <!-- Остальные посты. после последнего нет черты -->
+{% endfor %}
+  {% include 'pagination.html' with page=page_obj %} 
+{% endblock %}

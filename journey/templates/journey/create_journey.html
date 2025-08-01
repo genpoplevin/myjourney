@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}
+  Новый пост
+{% endblock %}
+{% block content %}
+  <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 p-5">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-header">
+                  Добавить путешествие
+              </div>
+              {% if form.errors %}
+                {% for field in form %}
+                  {% for error in field.errors %}            
+                    <div class="alert alert-danger">
+                      {{ error|escape }}
+                    </div>
+                  {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                  <div class="alert alert-danger">
+                    {{ error|escape }}
+                  </div>
+                {% endfor %}
+              <form 
+              method="post"
+              enctype="multipart/form-data"
+              action="{% url 'journey:journey_create' %}">
+              {% csrf_token %}
+                <div class="form-group row my-3 p-3">
+                  <label for="id_text">
+                    Локация<span class="required text-danger" >*</span>
+                  </label>
+                  {{ form.location }}
+                  <span class="helptext text-muted">Тема нового поста</span>
+                </div>
+                <div class="form-group row my-3 p-3">
+                  <label for="id_text">
+                    Цена<span class="required text-danger" >*</span>
+                  </label>
+                  {{ form.slug }}
+                  <span class="helptext text-muted">Цена путешествия</span>
+                </div>
+                <div class="form-group row my-3 p-3">
+                  <label for="id_text">
+                    Достопримечательности<span class="required text-danger" >*</span>
+                  </label>
+                  {{ form.heritage }}
+                  <span class="helptext text-muted">Достопримечательности</span>
+                </div>
+                <div class="d-flex justify-content-end">
+                  <button type="submit" class="btn btn-primary">
+                    <!--{% if is_edit %}
+                      Сохранить
+                    {% else %}
+                      Добавить
+                    {% endif %}-->
+                    Добавить
+                  </button>
+                </div>
+            </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

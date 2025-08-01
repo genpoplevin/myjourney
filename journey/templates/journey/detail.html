@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ journey.title }}{% endblock %}
+{% block content %}
+  <h1>{{ journey.title }}</h1>
+  <p class="date">
+      Опубликовано {{ journey.created }} by {{ journey.author }}
+  </p>
+  <li class="list-group-item">
+    <a href="{% url 'journey:profile' journey.author.username %}">
+      все путешествия пользователя
+    </a>
+  </li>
+  {{ journey.location|linebreaks }}
+  {{ journey.cost|linebreaks }}
+  {{ journey.heritage|linebreaks }}
+{% endblock %}

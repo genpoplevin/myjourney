@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}My Journey{% endblock %}
+{% block content %}
+  <h1>My Journey</h1>
+  {% for journey in journeys %}
+    <h2>
+      <a href="{% url 'journey:detail' journey.id %}">
+        {{ journey.title }}
+      </a>
+    </h2>
+    <p class="date">
+      Published {{ journey.created }} by {{ journey.author }}
+    </p>
+    {{ journey.body|truncatewords:30|linebreaks }}
+  {% endfor %}
+  {% include "pagination.html" with page=journeys %}
+{% endblock %}
