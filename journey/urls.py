@@ -6,7 +6,7 @@ from . import views
 app_name = 'journey'
 
 urlpatterns = [
-    path('', views.journey_list, name='post_list'),
+    path('', views.journey_list, name='journey_list'),
     path(
         '<int:journey_id>/',
         views.journey_detail,

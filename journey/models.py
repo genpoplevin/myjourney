@@ -9,7 +9,6 @@ User = get_user_model()
 class Journey(models.Model):
     location = models.CharField(max_length=250)
     cost = models.IntegerField()
-    heritage = models.TextField()
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -17,8 +16,12 @@ class Journey(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        ordering = ['-created']
-        indexes = [
-            models.Index(fields=['-created'])
-        ]
+
+class Place(models.Model):
+    journey = models.ForeignKey(
+        Journey,
+        related_name='places',
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(max_length=250)
+    link = models.CharField(max_length=250)

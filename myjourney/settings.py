@@ -112,5 +112,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_REDIRECT_URL = 'journey:journey_list'
 LOGIN_URL = 'account:login'
 LOGOUT_URL = 'account:logout'

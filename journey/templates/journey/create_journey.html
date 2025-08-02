@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block title %}
-  Новый пост
+  {% if is_edit %}
+    Редактировать пост
+  {% else %}
+    Новый пост
+  {% endif %}
 {% endblock %}
 {% block content %}
   <div class="container py-5">
@@ -9,8 +13,59 @@
           <div class="card">
             <div class="card-body">
               <div class="card-header">
-                  Добавить путешествие
+                {% if is_edit %}
+                  Редактировать запись
+                {% else %}
+                  Добавить запись
+                {% endif %}
               </div>
+              {% if is_edit %}
+              {% if request.user == post.author %}
+              <form 
+              method="post"
+              enctype="multipart/form-data"
+              action="{{ post.get_absolute_edit_url }}">
+                {% csrf_token %}
+                <div class="form-group row my-3 p-3">
+                  <label for="id_text">
+                    Тема<span class="required text-danger" >*</span>
+                  </label>
+                  {{ form.title }}
+                  <span class="helptext text-muted">Тема</span>
+                </div>
+                <div class="form-group row my-3 p-3">
+                  <label for="id_text">
+                    Слаг<span class="required text-danger" >*</span>
+                  </label>
+                  {{ form.slug }}
+                  <span class="helptext text-muted">Слаг нового поста</span>
+                </div>
+                <div class="form-group row my-3 p-3">
+                  <label for="id_text">
+                    Текст поста<span class="required text-danger" >*</span>
+                  </label>
+                  {{ form.body }}
+                  <span class="helptext text-muted">Текст поста</span>
+                </div>
+                <div class="form-group row my-3 p-3">
+                <label for="id_group">Тэги:</label>
+                {{ form.tags }}
+                <span class="helptext text-muted">
+                  Тэги:
+                </span>
+              </div>
+              <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary">
+                  {% if is_edit %} 
+                    Сохранить
+                  {% else %}
+                    Добавить
+                  {% endif %}
+                </button>
+              </div>
+              </form>
+              {% endif %}
+              {% else %}
               {% if form.errors %}
                 {% for field in form %}
                   {% for error in field.errors %}            
@@ -24,6 +79,7 @@
                     {{ error|escape }}
                   </div>
                 {% endfor %}
+              {% endif %}
               <form 
               method="post"
               enctype="multipart/form-data"
@@ -34,22 +90,33 @@
                     Локация<span class="required text-danger" >*</span>
                   </label>
                   {{ form.location }}
-                  <span class="helptext text-muted">Тема нового поста</span>
+                  <span class="helptext text-muted">Место путешествия</span>
                 </div>
                 <div class="form-group row my-3 p-3">
                   <label for="id_text">
                     Цена<span class="required text-danger" >*</span>
                   </label>
-                  {{ form.slug }}
+                  {{ form.cost }}
                   <span class="helptext text-muted">Цена путешествия</span>
                 </div>
-                <div class="form-group row my-3 p-3">
-                  <label for="id_text">
-                    Достопримечательности<span class="required text-danger" >*</span>
-                  </label>
-                  {{ form.heritage }}
-                  <span class="helptext text-muted">Достопримечательности</span>
-                </div>
+                <h3>Места культурного наследия:</h3>
+                {{ formset.management_form }}
+                {% for form in formset %}
+                  <div class="form-group row my-3 p-3">
+                    <label for="id_text">
+                      Название<span class="required text-danger" >*</span>
+                    </label>
+                    {{ form.name }}
+                    <span class="helptext text-muted">Название места</span>
+                  </div>
+                  <div class="form-group row my-3 p-3">
+                    <label for="id_text">
+                      Ссылка<span class="required text-danger" >*</span>
+                    </label>
+                    {{ form.link }}
+                    <span class="helptext text-muted">Ссылка</span>
+                  </div>
+                {% endfor %}
                 <div class="d-flex justify-content-end">
                   <button type="submit" class="btn btn-primary">
                     <!--{% if is_edit %}

@@ -7,17 +7,14 @@
   </head>
   <body>
     <div id="header">
-      <span class="logo"><a href="{% url "blog:post_list" %}">MyBlog</a></span>
+      <span class="logo"><a href="{% url "journey:journey_list" %}">MyJourney</a></span>
       {% if request.user.is_authenticated %}
         <ul class="menu">
-          <li {% if section == "post_list" %}class="selected"{% endif %}>
-            <a href="{% url 'blog:post_list' %}">Все записи</a>
-          </li>
-          <li {% if section == "follow" %}class="selected"{% endif %}>
-            <a href="{% url 'blog:follow_index' %}">Подписки</a>
+          <li {% if section == "journey_list" %}class="selected"{% endif %}>
+            <a href="{% url 'journey:journey_list' %}">Все путешествия</a>
           </li>
           <li  {% if section == "create" %}class="selected"{% endif %}> 
-            <a href="{% url 'blog:post_create' %}">Новая запись</a>
+            <a href="{% url 'journey:journey_create' %}">Новая запись</a>
           </li>
         </ul>
       {% endif %}
@@ -25,7 +22,7 @@
         {% if request.user.is_authenticated %}
           Hello {{ request.user.first_name|default:request.user.username }},
           <form action="{% url "account:logout" %}" method="post">
-            <button type="submit">Logout</button>
+            <button type="submit">Выйти</button>
             {% csrf_token %}
           </form>
         {% else %}
@@ -39,8 +36,7 @@
       {% endblock %}
     </div>
     <div id="sidebar">
-      <h2>My blog</h2>
-      <p>Это мой блог</p>
+      <h2>My Journey</h2>
     </div>
   </body>
 </html>

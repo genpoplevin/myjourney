@@ -2,12 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import JourneyForm
+from .forms import JourneyForm, PlaceFormSet
 from .models import Journey, User
 
 
 def journey_list(request):
-    journey_list = Journey.published.all()
+    journey_list = Journey.objects.all()
     paginator = Paginator(journey_list, 3)
     page_number = request.GET.get('page', 1)
     try:
@@ -41,17 +41,21 @@ def journey_detail(request, journey_id):
 
 
 @login_required
-def post_create(request):
+def journey_create(request):
     template = 'journey/create_journey.html'
     form = JourneyForm(request.POST or None)
+    formset = PlaceFormSet(request.POST or None)
     context = {
         'form': form,
+        'formset': formset,
         'section': 'create'
     }
-    if form.is_valid():
+    if form.is_valid() and formset.is_valid():
         journey = form.save(commit=False)
         journey.author = request.user
+        formset.instance = journey
         journey.save()
+        formset.save()
         return redirect(f'/journey/profile/{journey.author.username}/')
     return render(request, template, context)
 
@@ -59,7 +63,7 @@ def post_create(request):
 def profile(request, username):
     template = 'journey/profile.html'
     author = get_object_or_404(User, username=username)
-    post_list = author.posts.all().order_by('author')
+    post_list = author.journeys.all().order_by('author')
     paginator = Paginator(post_list, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)

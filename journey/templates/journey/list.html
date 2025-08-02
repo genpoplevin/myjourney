@@ -4,14 +4,18 @@
   <h1>My Journey</h1>
   {% for journey in journeys %}
     <h2>
-      <a href="{% url 'journey:detail' journey.id %}">
-        {{ journey.title }}
+      <a href="{% url 'journey:journey_detail' journey.id %}">
+        {{ journey.location }}
       </a>
     </h2>
     <p class="date">
-      Published {{ journey.created }} by {{ journey.author }}
+      Опубликовано {{ journey.created }} автором {{ journey.author }}
     </p>
-    {{ journey.body|truncatewords:30|linebreaks }}
+    {{ journey.location|truncatewords:30|linebreaks }}
+    ${{ journey.cost}}
+    <br>
+    <br>
+    {{ journey.heritage|truncatewords:30|linebreaks }}
   {% endfor %}
   {% include "pagination.html" with page=journeys %}
 {% endblock %}
